@@ -68,7 +68,7 @@ class App extends Component {
           <option value=''>-- pick a model --</option>
           {displayData(this.state.data)}
         </select>
-        <button onClick={this.addModel(this.state)}>Add</button>
+        <button onClick={() => {this.addModel(this.state)}}>Add</button>
       </div>
     );
   }
