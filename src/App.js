@@ -1,77 +1,80 @@
 import React, { Component } from 'react';
 import './App.css';
 import { connect } from 'react-redux'
+import ModelDetails from './components/ModelDetails';
 
-function displayData(data) {
-  return data.map((data, i) => {
-    return <option key={i} value={data.name}>{data.name} ({data.year})</option>
-  })
-}
+const data = [
+  {
+    name: "Ivel Z3",
+    manufacturer: "Ivasim",
+    year: 1969,
+    origin: "Croatia"
+  },
+  {
+    name: "Bally Astrocade",
+    manufacturer: "Bally Consumer Products",
+    year: 1977,
+    origin: "USA"
+  },
+  {
+    name: "Sord M200 Smart Home Computer",
+    manufacturer: "Sord Computer Corporation",
+    year: 1971,
+    origin: "Japan"
+  },
+  {
+    name: "Commodore 64",
+    manufacturer: "Commodore",
+    year: 1982,
+    origin: "USA"
+  }
+]
 
 class App extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      data: [
-        {
-          name: "Ivel Z3",
-          manufacturer: "Ivasim",
-          year: 1969,
-          origin: "Croatia"
-        },
-        {
-          name: "Bally Astrocade",
-          manufacturer: "Bally Consumer Products",
-          year: 1977,
-          origin: "USA"
-        },
-        {
-          name: "Sord M200 Smart Home Computer",
-          manufacturer: "Sord Computer Corporation",
-          year: 1971,
-          origin: "Japan"
-        },
-        {
-          name: "Commodore 64",
-          manufacturer: "Commodore",
-          year: 1982,
-          origin: "USA"
-        }
-      ]
-    }
+  state = {}
 
-    this.updateSelection = this.updateSelection.bind(this)
+  displayChoices(data) {
+    return data.map((data) => {
+      return <option key={data.name} value={data.name}>{data.name} ({data.year})</option>
+    })
   }
 
-  updateSelection(event) {
+  updateSelection = event => {
     this.setState(
-      this.state.data.find(model => model.name === event.target.value)
+      data.find(model => model.name === event.target.value)
     )
   }
 
-  addModel = (model) => {
+  addModel = model => {
     this.props.dispatch({
       type: 'ADD_MODEL',
-      payload: {
-        name: model.name,
-        manufacturer: model.manufacturer,
-        year: model.year,
-        origin: model.origin
-      }
+      payload: { ...model }
     })
   }
 
   render() {
     return (
       <div className="App">
+        {this.props.models.length !== 0 &&
+          this.props.models.map(model =>
+            <ModelDetails
+              name={model.name}
+              manufacturer={model.manufacturer}
+              year={model.year}
+              origin={model.origin} />
+          )}
         <select value={this.state.name} onChange={this.updateSelection}>
           <option value=''>-- pick a model --</option>
-          {displayData(this.state.data)}
+          {this.displayChoices(data)}
         </select>
-        <button onClick={() => {this.addModel(this.state)}}>Add</button>
+        <button onClick={() => { this.addModel(this.state) }}>Add</button>
       </div>
     );
   }
 }
 
-export default connect()(App);
+const mapStateToProps = state => {
+  return { models: [...state] }
+}
+
+export default connect(mapStateToProps)(App);

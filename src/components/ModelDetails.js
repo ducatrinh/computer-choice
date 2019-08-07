@@ -13,9 +13,10 @@ export default class ModelDetails extends Component {
         return (
             <div>
                 <ul>
-                    {model.map(model =>
-                        <li key={model.prop}>{model.prop}</li>
-                    )}
+                    <li>Name: {this.props.name}</li>
+                    <li>Manufacturer: {this.props.manufacturer}</li>
+                    <li>Year: {this.props.year}</li>
+                    <li>Origin: {this.props.origin}</li>
                 </ul>
             </div>
         )
